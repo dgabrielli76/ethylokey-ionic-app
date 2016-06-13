@@ -31,6 +31,8 @@ angular.module('starter.controllers', [])
     //Wait until the map is loaded
     google.maps.event.addListenerOnce($scope.map, 'idle', function() {
 
+      document.querySelector('#home-spinner').setAttribute('hidden', 'true');
+
       var marker = new google.maps.Marker({
         map: $scope.map,
         animation: google.maps.Animation.DROP,

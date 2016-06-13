@@ -1,9 +1,17 @@
 /* Empty. Add your own CSS if you like */
 .scroll {
-    height: 100%;
+  height: 100%;
 }
 
 #map {
-    width: 100%;
-    height: 75%;
+  width: 100%;
+  height: 75%;
+}
+
+div.spinner {
+  margin: auto;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+  height: 85px;
+  text-align: center;
 }
