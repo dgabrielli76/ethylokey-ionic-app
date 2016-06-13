@@ -1,8 +1,30 @@
 <ion-view view-title="Paramètres">
   <ion-content class="padding">
-    <h2>Settings page</h2>
-    <p>
-    This is the settings page.
-    </p>
+    <div class="list">
+      <label class="item item-input item-floating-label">
+        <span class="input-label">Age</span>
+        <input type="number" placeholder="Age" min="0" max="120">
+      </label>
+      <label class="item item-input item-floating-label">
+        <span class="input-label">Poids (kg)</span>
+        <input type="number" placeholder="Poids (kg)" min="0" max="300">
+      </label>
+      <label class="item item-input item-select">
+        <div class="input-label">
+          Sexe
+        </div>
+        <select>
+          <option selected>Homme</option>
+          <option>Femme</option>
+        </select>
+      </label>
+      <label class="item item-input item-floating-label">
+        <span class="input-label">Adresse (Rue, cp, ville)</span>
+        <input type="text" placeholder="Adresse">
+      </label>
+    </div>
+    <button class="button button-block button-positive">
+      Confirmer
+    </button>
   </ion-content>
 </ion-view>
