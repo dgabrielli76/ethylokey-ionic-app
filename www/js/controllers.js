@@ -139,7 +139,8 @@ angular.module('starter.controllers', ['firebase'])
   });
 
   User.getAlcolemie.then(function(data) {
-    console.log(data);
+    window.sessionStorage
+    .setItem('ethylokey-alcool', JSON.stringify(data));
     $scope.alcolemie = data;
   }, function() {
     console.log(' va te faire');
@@ -147,13 +148,42 @@ angular.module('starter.controllers', ['firebase'])
   var userMail = window.sessionStorage.getItem('ethylokey-mail');
   userMail = JSON.parse(userMail);
 
-  // User.getUser(userMail).then(function(data) {
-  //   $scope.user = data;
-  // }, function() {
-  //   console.log(' va te faire');
-  // });
-  //
   var user = window.sessionStorage.getItem('ethylokey-user-all');
   user = JSON.parse(user);
   $scope.user = user;
+
+  //calcul temps alcool
+  function TpsAlcool(poids, sexe, sensor) {
+    var conversion = 0;
+    if (sensor.alcoolemie != 0) {
+      if (sexe == 'Homme') {
+        if (poids >= 75) {
+          conversion = 0.15;
+        } else {
+          conversion = 0.1;
+        }
+      } else {
+        // c'est une femme
+        if (poids >= 60) {
+          conversion = 0.1;
+        } else {
+          conversion = 0.085;
+        }
+      }
+      temp = (sensor.alcoolemie * 100) / conversion;
+      result = (temp / 100) * 60;
+
+    }else {
+      result = 0;
+    }
+    return result;
+
+  };
+  var poids = $scope.user.poids;
+  var sexe = $scope.user.sexe;
+
+  var sensor = window.sessionStorage.getItem('ethylokey-alcool');
+  sensor = JSON.parse(sensor);
+
+  $scope.tpsAttente = TpsAlcool(poids, sexe, sensor);
 });
