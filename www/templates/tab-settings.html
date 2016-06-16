@@ -1,30 +1,37 @@
 <ion-view view-title="Paramètres">
   <ion-content class="padding">
-    <div class="list">
-      <label class="item item-input item-floating-label">
-        <span class="input-label">Age</span>
-        <input type="number" placeholder="Age" min="0" max="120">
-      </label>
-      <label class="item item-input item-floating-label">
-        <span class="input-label">Poids (kg)</span>
-        <input type="number" placeholder="Poids (kg)" min="0" max="300">
-      </label>
-      <label class="item item-input item-select">
-        <div class="input-label">
-          Sexe
-        </div>
-        <select>
-          <option selected>Homme</option>
-          <option>Femme</option>
-        </select>
-      </label>
-      <label class="item item-input item-floating-label">
-        <span class="input-label">Adresse (Rue, cp, ville)</span>
-        <input type="text" placeholder="Adresse">
-      </label>
-    </div>
-    <button class="button button-block button-positive">
-      Confirmer
-    </button>
+    <form name="updateUserForm" novalidate>
+      <div class="list">
+        <label class="item item-input item-floating-label">
+          <span class="input-label">Age</span>
+          <input type="number" name="age" ng-model="user.age" placeholder="Age" min="0" max="120">
+        </label>
+        <label class="item item-input item-floating-label">
+          <span class="input-label">Poids (kg)</span>
+          <input type="number" name="poids" ng-model="user.poids" placeholder="Poids (kg)" min="0" max="300">
+        </label>
+        <label class="item item-input item-select">
+          <div class="input-label">
+            Sexe
+          </div>
+          <select name="sexe" ng-model="user.sexe" selected="user.sexe">
+            <option value="Homme">Homme</option>
+            <option value="Femme">Femme</option>
+          </select>
+        </label>
+        <label class="item item-input item-floating-label">
+          <span class="input-label">Adresse (Rue, cp, ville)</span>
+          <input id="autocomplete-input" type="text" name="adresse" ng-model="user.adresse" placeholder="Adresse">
+        </label>
+        <label class="item item-input item-floating-label">
+          <span class="input-label">Numero favoris</span>
+          <input type="tel" name="numeroFav" ng-model="user.numeroFav" placeholder="Numero favoris">
+        </label>
+      </div>
+      <button class="button button-block button-positive" ng-click="update(user)">
+        Confirmer
+      </button>
+      <a href="#/ble">Bluetooh</a>
+    </form>
   </ion-content>
 </ion-view>

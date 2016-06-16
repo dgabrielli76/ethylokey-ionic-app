@@ -6,7 +6,7 @@
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
 angular.module('starter',
-  ['ionic', 'starter.controllers', 'starter.services', 'ngCordova'])
+  ['ionic', 'starter.controllers', 'starter.services', 'ngCordova', 'firebase'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -40,6 +40,18 @@ angular.module('starter',
   })
 
   // Each tab has its own nav history stack:
+  //
+  .state('login', {
+    url: '/login',
+    templateUrl: 'templates/login.html',
+    controller: 'IndexCtrl'
+  })
+
+  .state('ble', {
+    url: '/ble',
+    templateUrl: 'templates/ble.html',
+    controller: 'BLECtrl'
+  })
 
   .state('tab.taxis', {
     url: '/taxis',
@@ -82,6 +94,6 @@ angular.module('starter',
   });
 
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/tab/home');
+  $urlRouterProvider.otherwise('login');
 
 });

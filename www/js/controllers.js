@@ -1,34 +1,126 @@
-angular.module('starter.controllers', [])
+angular.module('starter.controllers', ['firebase'])
+
+.controller('IndexCtrl', function($scope, $state, User) {
+
+  $scope.submit = function(username, password) {
+    window.sessionStorage
+    .setItem('ethylokey-mail', JSON.stringify(username));
+    User.getUser(username, password).then(function(data) {
+      console.log(data);
+      $scope.user = data;
+      $state.go('tab.home');
+    }, function(error) {
+      console.log(error);
+      $scope.pop = function() {
+          toaster.pop('success', 'title', error);
+        };
+    });
+  };
+})
 
 .controller('TaxisCtrl', function($scope) {})
 
-.controller('SettingsCtrl', function($scope) {})
+.controller('SettingsCtrl', function($scope, $location, User) {
+  $scope.ble = function() {
+    console.log('redirect ble');
+    $location.path('/ble');
+  };
 
-.controller('HotelsCtrl', function($scope) {
-  // With the new view caching in Ionic, Controllers are only called
-  // when they are recreated or on app start, instead of every page change.
-  // To listen for when this page is active (for example, to refresh data),
-  // listen for the $ionicView.enter event:
-  //
-  //$scope.$on('$ionicView.enter', function(e) {
-  //});
+  // var userMail = window.sessionStorage.getItem('ethylokey-mail');
+  // userMail = JSON.parse(userMail);
+  // User.getUser(userMail).then(function(data) {
+  //   $scope.user = data;
+  // }, function() {
+  //   console.log(' va te faire');
+  // });
+  var user = window.sessionStorage.getItem('ethylokey-user-all');
+  user = JSON.parse(user);
+  $scope.user = user;
+
+  $scope.update = function(user) {
+    User.updateUser(user);
+  };
+
+  addAddressAutoCompletion()
+  .then(addListenerOnAutoCompleteChanged);
+
+  function addAddressAutoCompletion() {
+    return new Promise(function(resolve) {
+      // Create autocomplete field.
+      var autocomplete = new google.maps.places.Autocomplete(
+        document.querySelector('#autocomplete-input'), {
+          types: ['address']
+        });
+      resolve(autocomplete);
+    }.bind(this));
+  }
+
+  function addListenerOnAutoCompleteChanged(autocomplete) {
+    return new Promise(function() {
+      autocomplete.addListener('place_changed', function() {
+        var userSession = window.sessionStorage.getItem('ethylokey-key');
+        userSession = JSON.parse(userSession);
+        var ref = firebase.database().ref('users/' + userSession);
+        var location = autocomplete.getPlace().geometry.location;
+        ref.update({
+          adresse: autocomplete.getPlace().formatted_address,
+          lat: location.lat(),
+          lng: location.lng()
+        });
+      }.bind(this));
+    }.bind(this));
+  };
 })
 
-.controller('HomeCtrl', function($scope, $state, $cordovaGeolocation) {
+.controller('HotelsCtrl', function($scope) {})
+
+.controller('BLECtrl', function($scope, $location, Bluetooth) {
+  console.log('coucou ble');
+  Bluetooth.startScan();
+  $scope.devices = Bluetooth.devices;
+
+  $scope.connect = function(device) {
+    Bluetooth.connect(device);
+  };
+})
+
+.controller('HomeCtrl', function($scope, $state, $cordovaGeolocation, User) {
   var options = {timeout: 10000, enableHighAccuracy: true};
   $cordovaGeolocation.getCurrentPosition(options).then(function(position) {
 
     var latLng =
     new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 
-    var mapOptions = {
+    var moi = {lat: position.coords.latitude, lng: position.coords.longitude};
+
+    User.setMap();
+
+    var dest = window.sessionStorage.getItem('ethylokey-map');
+    dest = JSON.parse(dest);
+
+    $scope.map = new google.maps.Map(document.getElementById('map'), {
       center: latLng,
-      zoom: 15,
-      mapTypeId: google.maps.MapTypeId.ROADMAP
+      scrollwheel: false,
+      zoom: 7
+    });
+    var directionsDisplay = new google.maps.DirectionsRenderer({
+      map: $scope.map
+    });
+    // Set destination, origin and travel mode.
+    var request = {
+      destination: dest,
+      origin: moi,
+      travelMode: google.maps.TravelMode.DRIVING
     };
 
-    $scope.map =
-    new google.maps.Map(document.getElementById('map'), mapOptions);
+    // Pass the directions request to the directions service.
+    var directionsService = new google.maps.DirectionsService();
+    directionsService.route(request, function(response, status) {
+      if (status == google.maps.DirectionsStatus.OK) {
+        // Display the route on the map.
+        directionsDisplay.setDirections(response);
+      }
+    });
 
     //Wait until the map is loaded
     google.maps.event.addListenerOnce($scope.map, 'idle', function() {
@@ -40,18 +132,28 @@ angular.module('starter.controllers', [])
         animation: google.maps.Animation.DROP,
         position: latLng
       });
-
-      var infoWindow = new google.maps.InfoWindow({
-        content: 'Here I am!'
-      });
-
-      google.maps.event.addListener(marker, 'click', function() {
-        infoWindow.open($scope.map, marker);
-      });
-
     });
 
   }, function(error) {
     console.log('Could not get location');
   });
+
+  User.getAlcolemie.then(function(data) {
+    console.log(data);
+    $scope.alcolemie = data;
+  }, function() {
+    console.log(' va te faire');
+  });
+  var userMail = window.sessionStorage.getItem('ethylokey-mail');
+  userMail = JSON.parse(userMail);
+
+  // User.getUser(userMail).then(function(data) {
+  //   $scope.user = data;
+  // }, function() {
+  //   console.log(' va te faire');
+  // });
+  //
+  var user = window.sessionStorage.getItem('ethylokey-user-all');
+  user = JSON.parse(user);
+  $scope.user = user;
 });
