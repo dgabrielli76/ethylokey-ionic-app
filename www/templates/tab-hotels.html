@@ -1,6 +1,12 @@
 <ion-view view-title="Hôtels">
   <ion-content class="padding">
-    <h2>Hotels page</h2>
-    <p>This is the hotels page.</p>
-  </ion-content>
+  <ion-list>
+    <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="chat in chats" type="item-text-wrap" href="#/tab/chats/{{chat.id}}">
+      <img ng-src="{{chat.face}}">
+      <h2>{{chat.name}}</h2>
+      <p>{{chat.lastText}}</p>
+      <i class="icon ion-ios-telephone"></i>
+    </ion-item>
+  </ion-list>
+</ion-content>
 </ion-view>

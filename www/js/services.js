@@ -123,4 +123,94 @@ angular.module('starter.services', ['firebase'])
       numeroFav: user.numeroFav
     });
   };
+})
+
+.factory('Hotels', function() {
+  // Might use a resource here that returns a JSON array
+
+  // Some fake testing data
+  var chats = [{
+    id: 0,
+    name: 'Le Florence',
+    lastText: '33€',
+    face: 'img/hotel.png'
+  }, {
+    id: 1,
+    name: 'Ibis',
+    lastText: '38€',
+    face: 'img/hotel.png'
+  },
+    {
+    id: 3,
+    name: 'Ibis Bubdget',
+    lastText: '30€',
+    face: 'img/hotel.png'
+  }, {
+    id: 4,
+    name: 'Hôtel Mémorial',
+    lastText: '43€',
+    face: 'img/hotel.png'
+  }];
+
+  return {
+    all: function() {
+      return chats;
+    },
+    remove: function(chat) {
+      chats.splice(chats.indexOf(chat), 1);
+    },
+    get: function(chatId) {
+      for (var i = 0; i < chats.length; i++) {
+        if (chats[i].id === parseInt(chatId)) {
+          return chats[i];
+        }
+      }
+      return null;
+    }
+  };
+})
+
+.factory('Taxis', function() {
+  // Might use a resource here that returns a JSON array
+
+  // Some fake testing data
+  var chats = [{
+    id: 0,
+    name: 'Taxis Vasseur',
+    lastText: 'You on your way?',
+    face: 'img/taxi.png'
+  }, {
+    id: 1,
+    name: 'Gomes Manuel',
+    lastText: 'Hey, it\'s me',
+    face: 'img/taxi.png'
+  },
+    {
+    id: 3,
+    name: 'Taxi Eco Services',
+    lastText: 'Look at my mukluks!',
+    face: 'img/taxi.png'
+  }, {
+    id: 4,
+    name: 'Timarche Jean-René',
+    lastText: 'This is wicked good ice cream.',
+    face: 'img/taxi.png'
+  }];
+
+  return {
+    all: function() {
+      return chats;
+    },
+    remove: function(chat) {
+      chats.splice(chats.indexOf(chat), 1);
+    },
+    get: function(chatId) {
+      for (var i = 0; i < chats.length; i++) {
+        if (chats[i].id === parseInt(chatId)) {
+          return chats[i];
+        }
+      }
+      return null;
+    }
+  };
 });

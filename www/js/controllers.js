@@ -18,8 +18,6 @@ angular.module('starter.controllers', ['firebase'])
   };
 })
 
-.controller('TaxisCtrl', function($scope) {})
-
 .controller('SettingsCtrl', function($scope, $location, User) {
   $scope.ble = function() {
     console.log('redirect ble');
@@ -72,7 +70,20 @@ angular.module('starter.controllers', ['firebase'])
   };
 })
 
-.controller('HotelsCtrl', function($scope) {})
+.controller('HotelsCtrl', function($scope, Hotels) {
+
+  $scope.chats = Hotels.all();
+  $scope.remove = function(chat) {
+    Hotels.remove(chat);
+  };
+})
+
+.controller('TaxisCtrl', function($scope, Taxis) {
+  $scope.chats = Taxis.all();
+  $scope.remove = function(chat) {
+    Taxis.remove(chat);
+  };
+})
 
 .controller('BLECtrl', function($scope, $location, Bluetooth) {
   console.log('coucou ble');
@@ -142,6 +153,7 @@ angular.module('starter.controllers', ['firebase'])
     window.sessionStorage
     .setItem('ethylokey-alcool', JSON.stringify(data));
     $scope.alcolemie = data;
+    console.log(data);
   }, function() {
     console.log(' va te faire');
   });
